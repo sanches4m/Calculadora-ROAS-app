@@ -1,11 +1,9 @@
 import streamlit as st
 
-# O st.set_page_config() foi removido daqui e está no arquivo principal.
-
 st.title("📈 Calculadora de ROAS e Lucratividade")
 st.write("Calcule o ponto de equilíbrio e o ROAS ideal para atingir sua meta de lucro.")
 
-# MUDANÇA: As chaves do session_state agora têm o prefixo 'roas_' para evitar conflitos.
+# As chaves do session_state têm o prefixo 'roas_' para evitar conflitos.
 if 'roas_run_id' not in st.session_state:
     st.session_state.roas_run_id = 0
 if 'roas_calculation_done' not in st.session_state:
@@ -13,7 +11,7 @@ if 'roas_calculation_done' not in st.session_state:
 if 'roas_results' not in st.session_state:
     st.session_state.roas_results = {}
 
-# MUDANÇA: A função de reset foi atualizada para usar as novas chaves.
+# A função de reset para usar novas chaves.
 def reset_roas_calculator():
     """ Reseta os inputs e limpa os resultados da memória APENAS para esta calculadora. """
     st.session_state.roas_run_id += 1
@@ -29,7 +27,7 @@ TAXA_MAGALU_FIXA = 5.00
 # --- Entradas do Usuário ---
 st.sidebar.header("Passo 1: Dados da Venda (ROAS)")
 
-# MUDANÇA: As chaves dos widgets também foram prefixadas.
+# Chaves dos widgets prefixadas.
 run_id = st.session_state.roas_run_id
 valor_venda = st.sidebar.number_input("Valor da Venda (R$)", min_value=0.01, format="%.2f", key=f"roas_vv_{run_id}")
 custo_produto = st.sidebar.number_input("Custo do Produto (R$)", min_value=0.0, format="%.2f", key=f"roas_cp_{run_id}")
