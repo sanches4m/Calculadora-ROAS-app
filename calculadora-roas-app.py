@@ -30,7 +30,7 @@ TAXA_MAGALU_PERCENTUAL = 0.18
 TAXA_MAGALU_FIXA = 5.00
 
 # --- Entradas do Usuário (Inputs) na barra lateral ---
-st.sidebar.header("Passo 1: Insira os Dados da Venda")
+st.sidebar.header("Insira os Dados de Venda")
 valor_venda = st.sidebar.number_input("Valor da Venda (R$)", min_value=0.01, format="%.2f", key=f"valor_venda_{st.session_state.run_id}")
 custo_produto = st.sidebar.number_input("Custo do Produto (R$)", min_value=0.0, format="%.2f", key=f"custo_produto_{st.session_state.run_id}")
 custo_embalagem = st.sidebar.number_input("Custo da Embalagem (R$)", min_value=0.0, format="%.2f", key=f"custo_embalagem_{st.session_state.run_id}")
@@ -57,7 +57,7 @@ if calculate_button:
         taxa_fixa_shopee = 4.00
         taxa_percentual = 0.20 if participa_frete_gratis == "Sim" else 0.14
         comissao = (valor_venda * taxa_percentual) + taxa_fixa_shopee
-        detalhe_comissao = f"Comissão Shopee ({taxa_percentual*100}% + R$ {taxa_fixa_shopee:.2f})"
+        detalhe_comissao = f"Comissão Shopee ({taxa_percentual*100}% + {taxa_fixa_shopee:.2f})"
     elif plataforma_nome in ["Mercado Livre", "Amazon"]:
         taxa_percentual = comissao_percentual_manual
         comissao = valor_venda * taxa_percentual
@@ -92,7 +92,7 @@ if st.session_state.calculation_done:
     results = st.session_state.results
     lucro_bruto = results["lucro_bruto"]
     
-    st.header("Resultados do Ponto de Equilíbrio")
+    st.header("Resultado ROAS Equilíbrio")
     col1, col2 = st.columns(2)
     col1.metric("Lucro Bruto por Venda (sem Ads)", f"R$ {lucro_bruto:.2f}")
 
@@ -107,7 +107,7 @@ if st.session_state.calculation_done:
     with st.expander("Ver detalhes dos custos"):
         custos = results["detalhe_custos"]
         st.write(f"**Lucro Líquido (sem Ads): R$ {lucro_bruto:.2f}**")
-        st.write(f"- {custos['detalhe_comissao']}: R$ {custos['comissao']:.2f}")
+        st.write(f"- {custos['detalhe_comissao']}: {custos['comissao']:.2f}")
         st.write(f"- Valor do Imposto: R$ {custos['valor_imposto']:.2f}")
         st.write(f"- Custo Produto + Embalagem: R$ {custos['custo_produto_embalagem']:.2f}")
         st.write("---")
@@ -122,7 +122,7 @@ if st.session_state.calculation_done:
         if verba_maxima_ads > 0:
             roas_ideal = results["valor_venda"] / verba_maxima_ads
             st.subheader(f"Seu ROAS Ideal para começar é de: {roas_ideal:.2f}")
-            st.success(f"Para obter um lucro de **R$ {lucro_desejado:.2f}**, você pode gastar até **R$ {verba_maxima_ads:.2f}** em anúncios, exigindo um ROAS de **{roas_ideal:.2f}**.")
+            st.success(f"Para obter um lucro de {lucro_desejado:.2f} reais, você gastaria até {verba_maxima_ads:.2f} reais em anúncios, exigindo um ROAS de **{roas_ideal:.2f}**.")
         else:
             st.warning("O lucro desejado é muito alto. Não há margem para investir em anúncios e atingir essa meta.")
     else:
