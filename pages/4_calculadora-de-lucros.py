@@ -2,16 +2,14 @@ import streamlit as st
 import sys
 import os
 
+# Importação dos estilos visuais
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 from estilos import aplicar_estilo_visual
 
 aplicar_estilo_visual()
 
-st.set_page_config(layout="centered") # Opcional, caso queira forçar layout nesta pág
-
-st.title("🎯 Calculadora de Preço por Meta de Lucro")
-st.markdown("Defina quanto você quer lucrar (em R$) e descubra o preço de venda exato para cobrir todos os custos e taxas.")
+st.title("🎯 Calculadora de Preço por Meta")
+st.markdown("Defina quanto você quer lucrar (em R$ ou %) e descubra o preço de venda exato.")
 
 # --- Estado de Sessão ---
 if 'meta_run_id' not in st.session_state:
@@ -26,7 +24,7 @@ TAXA_SHEIN = 0.20
 TAXA_MAGALU_PERCENTUAL = 0.18
 TAXA_MAGALU_FIXA = 5.00
 
-# --- Entradas (Inputs) ---
+# --- Entradas (Inputs) na Barra Lateral ---
 st.sidebar.header("📝 Configuração de Custos")
 run_id = st.session_state.meta_run_id
 
@@ -59,51 +57,85 @@ with st.sidebar.expander("🛒 Taxas da Plataforma", expanded=True):
 st.sidebar.divider()
 st.sidebar.button("🔄 Resetar Calculadora", on_click=reset_meta_calculator, use_container_width=True)
 
-# --- Área Principal: Definição da Meta ---
-st.container()
-col_meta, col_vazio = st.columns([2, 1])
-with col_meta:
-    st.subheader("Quanto você quer lucrar?")
-    lucro_alvo = st.number_input(
-        "Digite o valor do lucro líquido desejado (R$):", 
-        min_value=0.0, value=5.00, step=1.00, format="%.2f",
-        help="Este é o valor que vai sobrar limpo no seu bolso."
-    )
+# --- ÁREA PRINCIPAL: ABAS PARA ESCOLHER O TIPO DE META ---
+st.write("") # Espaçamento
+tab_valor, tab_porc = st.tabs(["💲 Meta em Valor (R$)", "📊 Meta em Porcentagem (%)"])
 
-if st.button("🚀 Calcular Preço de Venda Necessário", type="primary", use_container_width=True):
+# --- ABA 1: META EM VALOR (R$) ---
+with tab_valor:
+    st.info("Use esta opção se você quer garantir um valor fixo no bolso (ex: Lucrar R$ 10,00).")
     
-    # --- MATEMÁTICA REVERSA ---
-    # Preço = (Custos + Lucro + TaxaFixa) / (1 - TaxaImposto - TaxaPlataforma%)
+    col_v1, col_v2 = st.columns([2, 1])
+    with col_v1:
+        lucro_alvo_valor = st.number_input(
+            "Lucro Líquido Desejado (R$):", 
+            min_value=0.0, value=5.00, step=1.00, format="%.2f",
+            key=f"alvo_valor_{run_id}"
+        )
+
+    if st.button("Calcular por Valor (R$)", type="primary", use_container_width=True, key="btn_valor"):
+        
+        # Fórmula: Preço = (Custos + TaxasFixas + LucroDesejado) / (1 - TaxasPercentuais)
+        custos_fixos_absolutos = custo_produto + custo_embalagem + lucro_alvo_valor + taxa_plataforma_fixa
+        denominador = 1 - (taxa_imposto + taxa_plataforma_percentual)
+
+        if denominador <= 0:
+             st.error("Erro: As taxas somadas são maiores que 100%. Impossível calcular.")
+        else:
+            preco_sugerido = custos_fixos_absolutos / denominador
+            
+            # Conferência
+            comissao_total = (preco_sugerido * taxa_plataforma_percentual) + taxa_plataforma_fixa
+            imposto_total = preco_sugerido * taxa_imposto
+            margem_real = (lucro_alvo_valor / preco_sugerido) * 100
+
+            st.divider()
+            st.markdown(f"### ✅ Venda por:")
+            st.metric(label="Preço Sugerido", value=f"R$ {preco_sugerido:.2f}", delta=f"Margem: {margem_real:.1f}%")
+            
+            with st.expander("Ver detalhes da conta"):
+                st.write(f"**Custos (Prod+Emb):** R$ {custo_produto+custo_embalagem:.2f}")
+                st.write(f"**Comissão:** R$ {comissao_total:.2f}")
+                st.write(f"**Imposto:** R$ {imposto_total:.2f}")
+                st.success(f"**Lucro Líquido:** R$ {lucro_alvo_valor:.2f}")
+
+# --- ABA 2: META EM PORCENTAGEM (%) ---
+with tab_porc:
+    st.info("Use esta opção se você quer garantir uma margem saudável (ex: Lucrar 20%).")
     
-    custos_fixos_absolutos = custo_produto + custo_embalagem + lucro_alvo + taxa_plataforma_fixa
-    denominador = 1 - (taxa_imposto + taxa_plataforma_percentual)
+    col_p1, col_p2 = st.columns([2, 1])
+    with col_p1:
+        margem_alvo_perc = st.slider(
+            "Margem de Lucro Desejada (%):", 
+            min_value=1.0, max_value=50.0, value=15.0, step=0.5,
+            key=f"alvo_perc_{run_id}"
+        ) / 100
 
-    if denominador <= 0:
-        st.error("Erro: As taxas somadas (Plataforma + Imposto) são iguais ou maiores que 100%. É impossível lucrar assim.")
-    else:
-        preco_venda_necessario = custos_fixos_absolutos / denominador
+    if st.button("Calcular por Porcentagem (%)", type="primary", use_container_width=True, key="btn_perc"):
         
-        # Cálculos de conferência
-        comissao_total = (preco_venda_necessario * taxa_plataforma_percentual) + taxa_plataforma_fixa
-        imposto_total = preco_venda_necessario * taxa_imposto
-        custo_total = custo_produto + custo_embalagem + comissao_total + imposto_total
-        margem_percentual = (lucro_alvo / preco_venda_necessario) * 100
-
-        # --- EXIBIÇÃO ---
-        st.divider()
-        st.markdown(f"### ✅ Para lucrar **R$ {lucro_alvo:.2f}**, anuncie por:")
-        st.metric(label="Preço de Venda Sugerido", value=f"R$ {preco_venda_necessario:.2f}", delta=f"Margem: {margem_percentual:.1f}%")
-
-        # Detalhes visuais
-        st.write("---")
-        st.write("**Detalhamento da Composição do Preço:**")
+        # Fórmula: Preço = (Custos + TaxasFixas) / (1 - TaxasPercentuais - MargemDesejada)
+        custos_fixos_absolutos = custo_produto + custo_embalagem + taxa_plataforma_fixa
+        total_taxas_perc = taxa_imposto + taxa_plataforma_percentual
         
-        col1, col2, col3, col4 = st.columns(4)
-        col1.metric("Produto+Emb.", f"R$ {custo_produto+custo_embalagem:.2f}")
-        col2.metric("Comissão", f"R$ {comissao_total:.2f}")
-        col3.metric("Imposto", f"R$ {imposto_total:.2f}")
-        col4.metric("SEU LUCRO", f"R$ {lucro_alvo:.2f}")
+        # O "divisor" é o que sobra do preço (100%) depois de tirar impostos, comissão e a sua margem
+        denominador = 1 - (total_taxas_perc + margem_alvo_perc)
 
-        # Gráfico de barras simples com progress bar para visualização
-        st.caption("Distribuição do valor de venda:")
-        st.progress(int(margem_percentual) if margem_percentual < 100 else 100)
+        if denominador <= 0:
+            st.error(f"Impossível! Taxas ({total_taxas_perc*100:.1f}%) + Margem ({margem_alvo_perc*100:.1f}%) somam mais de 100%.")
+        else:
+            preco_sugerido = custos_fixos_absolutos / denominador
+            
+            # Conferência
+            lucro_em_reais = preco_sugerido * margem_alvo_perc
+            comissao_total = (preco_sugerido * taxa_plataforma_percentual) + taxa_plataforma_fixa
+            imposto_total = preco_sugerido * taxa_imposto
+
+            st.divider()
+            st.markdown(f"### ✅ Venda por:")
+            st.metric(label="Preço Sugerido", value=f"R$ {preco_sugerido:.2f}", delta=f"Lucro: R$ {lucro_em_reais:.2f}")
+            
+            with st.expander("Ver detalhes da conta"):
+                st.write(f"**Custos (Prod+Emb):** R$ {custo_produto+custo_embalagem:.2f}")
+                st.write(f"**Comissão:** R$ {comissao_total:.2f}")
+                st.write(f"**Imposto:** R$ {imposto_total:.2f}")
+                st.success(f"**Lucro Líquido ({margem_alvo_perc*100:.1f}%):** R$ {lucro_em_reais:.2f}")
