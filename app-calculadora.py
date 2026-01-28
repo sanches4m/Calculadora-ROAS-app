@@ -1,11 +1,14 @@
 # app_calculadora.py
 import streamlit as st
+from estilos import aplicar_estilo_visual
 
 st.set_page_config(
-    page_title="Hub de Ferramentas para E-commerce",
+    page_title="Hub de Ferramentas",
     page_icon="🛠️",
     layout="centered"
 )
+
+aplicar_estilo_visual()
 
 st.title("🛠️ Hub de Ferramentas para E-commerce")
 st.markdown("---")

@@ -1,4 +1,12 @@
 import streamlit as st
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from estilos import aplicar_estilo_visual
+
+aplicar_estilo_visual()
 
 st.title("💰 Calculadora de Preço e Margem")
 st.markdown("Analise a saúde do seu preço atual e simule cenários para aumentar sua margem.")
