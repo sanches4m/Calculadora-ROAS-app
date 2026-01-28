@@ -1,97 +1,100 @@
+# Python and CSS
 import streamlit as st
 
 def aplicar_estilo_visual():
     st.markdown("""
         <style>
-        /* --- IMPORTANDO FONTES (Google Fonts) --- */
+        /* --- IMPORTANDO FONTES --- */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
         html, body, [class*="css"] {
             font-family: 'Inter', sans-serif;
         }
 
-        /* --- ESTILIZANDO OS CARTÕES DE MÉTRICAS (KPIs) --- */
+        /* --- ESTILIZANDO OS CARTÕES DE MÉTRICAS (KPIs) - MODO ESCURO --- */
         [data-testid="stMetric"] {
-            background-color: #ffffff;
-            border: 1px solid #f0f2f6;
+            background-color: #262730; /* Fundo cinza escuro para o cartão */
+            border: 1px solid #3d3d3d;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Sombra mais escura */
             transition: all 0.3s ease;
         }
         
-        /* Efeito ao passar o mouse sobre o cartão */
         [data-testid="stMetric"]:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-            border-color: #e0e0e0;
+            border-color: #00ADB5; /* Borda ciano ao passar o mouse */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
         }
 
         /* Cor do rótulo da métrica (Label) */
         [data-testid="stMetricLabel"] {
-            color: #6c757d;
+            color: #b0b0b0; /* Cinza claro para leitura fácil */
             font-size: 14px;
             font-weight: 600;
         }
 
         /* Cor do valor da métrica */
         [data-testid="stMetricValue"] {
-            color: #1f2937;
+            color: #ffffff; /* Branco puro para destaque */
             font-weight: 700;
+        }
+        
+        /* Cor do Delta (A setinha de porcentagem) */
+        [data-testid="stMetricDelta"] svg {
+            fill: #00ADB5 !important;
         }
 
         /* --- BOTÕES --- */
-        /* Botão Primário (Calcular/Ação) */
-        button[kind="primary"] {
-            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
-            border: none;
-            color: white;
-            padding: 0.5rem 1rem;
+        /* Vamos deixar o Streamlit controlar a cor base pelo config.toml 
+           e apenas arredondar e dar estilo */
+        
+        div.stButton > button {
             border-radius: 8px;
             font-weight: 600;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
+            height: auto;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
         }
+
+        /* Botão Primário (Calcular) com brilho */
+        button[kind="primary"] {
+            box-shadow: 0 0 10px rgba(0, 173, 181, 0.3);
+            border: none;
+        }
+        
         button[kind="primary"]:hover {
-            box-shadow: 0 6px 12px rgba(75, 108, 183, 0.4);
+            box-shadow: 0 0 20px rgba(0, 173, 181, 0.6);
             transform: scale(1.02);
         }
 
         /* Botão Secundário (Resetar) */
         button[kind="secondary"] {
-            border: 1px solid #d1d5db;
-            color: #374151;
-            border-radius: 8px;
+            border: 1px solid #4a4a4a;
+            color: #e0e0e0;
         }
-
-        /* --- BARRA LATERAL (SIDEBAR) --- */
-        [data-testid="stSidebar"] {
-            background-color: #f8f9fa;
-            border-right: 1px solid #e5e7eb;
-        }
-
-        /* Estilo dos Expanders na barra lateral */
-        .streamlit-expanderHeader {
-            background-color: #ffffff;
-            border-radius: 6px;
-            border: 1px solid #e5e7eb;
-            font-weight: 600;
+        button[kind="secondary"]:hover {
+            border-color: #b0b0b0;
+            color: #ffffff;
         }
 
         /* --- TÍTULOS --- */
         h1 {
-            color: #111827;
+            background: linear-gradient(90deg, #00ADB5 0%, #EEEEEE 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             font-weight: 800;
-            letter-spacing: -0.025em;
         }
+        
         h2, h3 {
-            color: #374151;
+            color: #e0e0e0;
         }
 
-        /* Linhas divisórias */
+        /* Linhas divisórias mais sutis */
         hr {
             margin: 2em 0;
-            border-color: #e5e7eb;
+            border-color: #3d3d3d;
         }
         </style>
     """, unsafe_allow_html=True)
