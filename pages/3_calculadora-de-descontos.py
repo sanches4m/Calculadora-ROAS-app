@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from estilos import aplicar_estilo_visual
 
-aplicar_estilo_visual()
+# aplicar_estilo_visual()
 
 st.title("🏷️ Calculadora de Descontos Estratégicos")
 st.write("Ferramentas para planejar promoções e analisar descontos.")
