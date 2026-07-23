@@ -1,4 +1,4 @@
-'''import streamlit as st
+import streamlit as st
 
 def aplicar_estilo_visual():
     st.markdown("""
