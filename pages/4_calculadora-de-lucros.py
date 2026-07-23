@@ -5,7 +5,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from estilos import aplicar_estilo_visual
 
-aplicar_estilo_visual()
+# aplicar_estilo_visual()
 
 st.title("🎯 Calculadora de Preço por Meta")
 st.markdown("Defina quanto você quer lucrar (em R$ ou %) e descubra o preço de venda exato.")
