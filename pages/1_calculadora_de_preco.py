@@ -11,7 +11,6 @@ aplicar_estilo_visual()
 st.title("💰 Calculadora de Preço e Margem")
 st.markdown("Analise a saúde do seu preço atual e simule cenários para aumentar sua margem.")
 
-# --- Estado de Sessão ---
 if 'preco_run_id' not in st.session_state:
     st.session_state.preco_run_id = 0
 if 'preco_calculation_done' not in st.session_state:
@@ -24,23 +23,19 @@ def reset_preco_calculator():
     st.session_state.preco_calculation_done = False
     st.session_state.preco_results = {}
 
-# --- Dicionários ---
 PLATFORMAS = ["Shopee", "Mercado Livre", "Amazon", "Shein", "Magalu"]
 TAXA_SHEIN = 0.20
 TAXA_MAGALU_PERCENTUAL = 0.18
 TAXA_MAGALU_FIXA = 5.00
 
-# --- Barra Lateral Moderna ---
 st.sidebar.header("📝 Dados da Venda")
 run_id = st.session_state.preco_run_id
 
-# Grupo 1: Custos
 with st.sidebar.expander("💸 Custos do Produto", expanded=True):
     custo_produto = st.number_input("Custo do Produto (R$)", 0.01, key=f"preco_cp_{run_id}")
     custo_embalagem = st.number_input("Custo da Embalagem (R$)", 0.0, key=f"preco_ce_{run_id}")
     taxa_imposto = st.slider("Imposto (%)", 0.0, 30.0, 0.0, 0.5, key=f"preco_imp_{run_id}") / 100
 
-# Grupo 2: Plataforma
 with st.sidebar.expander("🏪 Plataforma", expanded=True):
     plataforma_nome = st.selectbox("Canal de Venda", PLATFORMAS, key=f"preco_plat_{run_id}")
     
@@ -50,7 +45,6 @@ with st.sidebar.expander("🏪 Plataforma", expanded=True):
     elif plataforma_nome in ["Mercado Livre", "Amazon"]:
         comissao_percentual_manual = st.number_input(f"Taxa % {plataforma_nome}", 0.0, 100.0, 17.0, 0.5, key=f"preco_manual_comissao_{run_id}") / 100
 
-# Grupo 3: Preço
 with st.sidebar.expander("🏷️ Preço Atual", expanded=True):
     preco_venda_atual = st.number_input("Preço de Venda (R$)", 0.01, key=f"preco_pv_{run_id}")
 
@@ -58,9 +52,7 @@ st.sidebar.divider()
 calculate_button = st.sidebar.button("📊 Analisar Lucratividade", type="primary", use_container_width=True)
 st.sidebar.button("🔄 Resetar", on_click=reset_preco_calculator, use_container_width=True)
 
-# --- Cálculo ---
 if calculate_button:
-    # Comissão
     detalhe_comissao, comissao = "", 0.0
     if plataforma_nome == "Shopee":
         taxa_fixa_shopee = 4.00
@@ -91,7 +83,6 @@ if calculate_button:
         "comissao": comissao, "valor_imposto": valor_imposto
     }
 
-# --- Resultados ---
 if st.session_state.preco_calculation_done:
     res = st.session_state.preco_results
     
@@ -102,14 +93,12 @@ if st.session_state.preco_calculation_done:
     col1.metric("Preço Analisado", f"R$ {res['preco_venda']:.2f}")
     col2.metric("Lucro Líquido", f"R$ {res['lucro_liquido']:.2f}", delta_color="normal")
     
-    # Define cor da margem
     cor_delta = "normal"
-    if res['margem_lucro'] < 10: cor_delta = "inverse" # Vermelho se < 10%
-    if res['margem_lucro'] > 20: cor_delta = "off"     # Cinza/Verde (depende do tema) se > 20%
+    if res['margem_lucro'] < 10: cor_delta = "inverse"
+    if res['margem_lucro'] > 20: cor_delta = "off"
     
     col3.metric("Margem Real", f"{res['margem_lucro']:.2f}%", delta=f"{res['margem_lucro']:.1f}%", delta_color=cor_delta)
 
-    # Detalhes
     with st.expander("🧾 Extrato detalhado da operação"):
         st.write(f"**Receita Bruta:** R$ {res['preco_venda']:.2f}")
         st.write(f"(-) Custos (Prod+Emb): R$ {res['custo_total_produto']:.2f}")
@@ -121,12 +110,10 @@ if st.session_state.preco_calculation_done:
         else:
             st.error(f"**= Prejuízo: R$ {res['lucro_liquido']:.2f}**")
 
-    # --- Simulador ---
     st.divider()
     st.subheader("🎚️ Simulador de Cenários")
     st.markdown("Arraste para ver como o preço afeta sua margem em tempo real.")
     
-    # Slider inteligente baseado no preço atual
     novo_preco = st.slider(
         "Novo Preço de Venda (R$)",
         min_value=float(res['custo_total_produto'] * 1.1),
@@ -135,7 +122,6 @@ if st.session_state.preco_calculation_done:
         format="%.2f"
     )
 
-    # Recálculo rápido
     nova_comissao = 0.0
     if plataforma_nome == "Shopee":
         tx_fixa = 4.00
