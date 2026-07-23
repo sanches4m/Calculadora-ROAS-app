@@ -7,7 +7,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# aplicar_estilo_visual()
+aplicar_estilo_visual()
 
 st.title("🛠️ Hub de Ferramentas para E-commerce")
 st.markdown("---")
