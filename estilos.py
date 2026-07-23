@@ -1,17 +1,14 @@
-# Python and CSS
-import streamlit as st
+'''import streamlit as st
 
 def aplicar_estilo_visual():
     st.markdown("""
         <style>
-        /* --- IMPORTANDO FONTES --- */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
         html, body, [class*="css"] {
             font-family: 'Inter', sans-serif;
         }
 
-        /* --- ESTILIZANDO OS CARTÕES DE MÉTRICAS (KPIs) - MODO ESCURO --- */
         [data-testid="stMetric"] {
             background-color: #262730; /* Fundo cinza escuro para o cartão */
             border: 1px solid #3d3d3d;
@@ -27,14 +24,12 @@ def aplicar_estilo_visual():
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
         }
 
-        /* Cor do rótulo da métrica (Label) */
         [data-testid="stMetricLabel"] {
             color: #b0b0b0; /* Cinza claro para leitura fácil */
             font-size: 14px;
             font-weight: 600;
         }
 
-        /* Cor do valor da métrica */
         [data-testid="stMetricValue"] {
             color: #ffffff; /* Branco puro para destaque */
             font-weight: 700;
@@ -45,7 +40,6 @@ def aplicar_estilo_visual():
             fill: #00ADB5 !important;
         }
 
-        /* --- BOTÕES --- */
         /* Vamos deixar o Streamlit controlar a cor base pelo config.toml 
            e apenas arredondar e dar estilo */
         
@@ -58,7 +52,6 @@ def aplicar_estilo_visual():
             padding-bottom: 0.5rem;
         }
 
-        /* Botão Primário (Calcular) com brilho */
         button[kind="primary"] {
             box-shadow: 0 0 10px rgba(0, 173, 181, 0.3);
             border: none;
@@ -69,7 +62,6 @@ def aplicar_estilo_visual():
             transform: scale(1.02);
         }
 
-        /* Botão Secundário (Resetar) */
         button[kind="secondary"] {
             border: 1px solid #4a4a4a;
             color: #e0e0e0;
@@ -79,7 +71,6 @@ def aplicar_estilo_visual():
             color: #ffffff;
         }
 
-        /* --- TÍTULOS --- */
         h1 {
             background: linear-gradient(90deg, #00ADB5 0%, #EEEEEE 100%);
             -webkit-background-clip: text;
@@ -91,10 +82,9 @@ def aplicar_estilo_visual():
             color: #e0e0e0;
         }
 
-        /* Linhas divisórias mais sutis */
         hr {
             margin: 2em 0;
             border-color: #3d3d3d;
         }
         </style>
-    """, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)'''
