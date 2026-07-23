@@ -11,7 +11,6 @@ aplicar_estilo_visual()
 st.title("🏷️ Calculadora de Descontos Estratégicos")
 st.write("Ferramentas para planejar promoções e analisar descontos.")
 
-# --- Estado e Reset ---
 if 'desc_run_id' not in st.session_state:
     st.session_state.desc_run_id = 0
 def reset_desc_calculator():
@@ -20,14 +19,12 @@ def reset_desc_calculator():
 st.sidebar.button("🔄 Resetar Esta Calculadora", on_click=reset_desc_calculator, use_container_width=True)
 run_id = st.session_state.desc_run_id
 
-# --- Abas organizadas (A = Vitrine, B = Final, C = Porcentagem) ---
 tab_vitrine, tab_final, tab_porc = st.tabs([
     "🎯 Modo A: Definir Preço de Vitrine",
     "💰 Modo B: Calcular Preço Final",
     "🔍 Modo C: Descobrir % Aplicada"
 ])
 
-# --- MODO A: O principal ---
 with tab_vitrine:
     st.header("Planejar Preço de Vitrine (Âncora)")
     st.info("Você sabe por quanto quer vender, mas quer anunciar um valor maior com desconto.")
@@ -45,7 +42,6 @@ with tab_vitrine:
         st.metric(label="Anuncie o produto 'DE':", value=f"R$ {preco_vitrine:.2f}")
         st.caption(f"Anunciando por **R$ {preco_vitrine:.2f}** com **{desconto_a}% OFF**, o preço cai para **R$ {preco_final_a:.2f}**.")
 
-# --- MODO B: Simular Preço Final ---
 with tab_final:
     st.header("Simular Preço Final")
     st.info("Tenho o preço cheio e quero ver quanto fica se der X% de desconto.")
@@ -62,7 +58,6 @@ with tab_final:
         
         st.metric(label="Preço Final 'POR':", value=f"R$ {preco_final:.2f}", delta=f"- R$ {valor_desconto:.2f}")
 
-# --- MODO C: Auditoria ---
 with tab_porc:
     st.header("Descobrir a % Real")
     st.info("Qual foi o desconto real dado entre dois preços?")
