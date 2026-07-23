@@ -20,7 +20,7 @@ Criado para otimizar a inteligência de negócios e o controle financeiro (utili
 * **Tomada de Decisão Ágil:** Permite que a equipe ajuste preços e estratégias de marketing em segundos, respondendo rapidamente à concorrência.
 * **Escalabilidade:** A arquitetura em código (ao invés de planilhas) permite a fácil manutenção e rápida adição de novos marketplaces à medida que o negócio expande.
 
-## 🚀 Como Executar o Projeto Localmente
+## Como Executar o Projeto Localmente
 1. Clone este repositório: `git clone https://github.com/SEU_USUARIO/NOME_DO_REPOSITORIO.git`
 2. Certifique-se de ter o Python instalado em sua máquina.
 3. Instale a biblioteca do Streamlit executando no terminal: `pip install streamlit`
