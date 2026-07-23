@@ -1,4 +1,3 @@
-# app_calculadora.py
 import streamlit as st
 from estilos import aplicar_estilo_visual
 
@@ -15,9 +14,9 @@ st.markdown("---")
 st.header("Bem-vindo(a)!")
 st.markdown(
     """
-    Este é o seu centro de controle para cálculos essenciais de e-commerce.
+    Este é o centro de controle para cálculos essenciais do seu e-commerce.
     
-    Navegue pelas ferramentas disponíveis utilizando o menu na barra lateral à esquerda.
+    Navegue pelas ferramentas disponíveis utilizando o menu na barra lateral.
     
     👈 **Selecione uma calculadora para começar!**
     
